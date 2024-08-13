@@ -3,7 +3,7 @@ import './App.css';
 import logo from './images/logo.png';
 import 'font-awesome/css/font-awesome.min.css';
 import Category from './components/Category/Category.js';
-import CategorysItem from './components/CategorysItem/CategorysItem.js';
+import Item from './components/Item/Item.js';
 
 function App() {
     const [categories, setCategories] = useState([]);
@@ -69,7 +69,7 @@ function App() {
                         </div>
                         {selectedCategoryId === category.id && (
                             <div className='category-products'>
-                                <CategorysItem categoryId={selectedCategoryId} />
+                                <Item categoryId={selectedCategoryId} />
                             </div>
                         )}
                     </div>

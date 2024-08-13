@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function CategorysItem({ categoryId, onProductsLoaded }) {
+function Item({ categoryId, onProductsLoaded }) {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [products, setProducts] = useState([]);
@@ -8,7 +8,7 @@ function CategorysItem({ categoryId, onProductsLoaded }) {
     useEffect(() => {
         let isMounted = true;
 
-        fetch(`http://localhost:8088/api/v1/admin/all-category/${categoryId}`, {
+        fetch(`http://localhost:8088/api/v1/menu/get-active-menu`, {
             method: 'GET'
         })
         .then(res => res.json())
@@ -16,10 +16,14 @@ function CategorysItem({ categoryId, onProductsLoaded }) {
             (result) => {
                 if (isMounted) {
                     setIsLoaded(true);
-                    setProducts(result);
+                    // Find the category matching the given categoryId
+                    const category = result.menusCategoryDtoList.find(menuCategory => menuCategory.categoryDto.id === categoryId);
+                    // Extract the products from the category's item DTOs
+                    const items = category ? category.categoryDto.categoriesItemDtoList.map(item => item.itemDto) : [];
+                    setProducts(items);
                     if (onProductsLoaded) {
-                        onProductsLoaded(result);
-                        console.log(result);
+                        onProductsLoaded(items);
+                        console.log(items);
                     }
                 }
             },
@@ -59,4 +63,4 @@ function CategorysItem({ categoryId, onProductsLoaded }) {
     }
 }
 
-export default CategorysItem;
+export default Item;

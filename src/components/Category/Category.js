@@ -6,10 +6,9 @@ function Category({ onCategoriesLoaded }) {
     const [categoryList, setCategoryList] = useState([]);
 
     useEffect(() => {
-        // İstek yapılmadan önceki temizliği kontrol et
         let isMounted = true;
 
-        fetch('http://localhost:8088/api/v1/admin/category/categories', {
+        fetch('http://localhost:8088/api/v1/menu/get-active-menu', {
             method: 'GET'
         })
         .then(res => res.json())
@@ -17,9 +16,11 @@ function Category({ onCategoriesLoaded }) {
             (result) => {
                 if (isMounted) {
                     setIsLoaded(true);
-                    setCategoryList(result);
+                    // Extract the list of categoryDtos from menusCategoryDtoList
+                    const categories = result.menusCategoryDtoList.map(menuCategory => menuCategory.categoryDto);
+                    setCategoryList(categories);
                     if (onCategoriesLoaded) {
-                        onCategoriesLoaded(result);
+                        onCategoriesLoaded(categories);
                     }
                 }
             },
@@ -32,7 +33,6 @@ function Category({ onCategoriesLoaded }) {
             }
         );
 
-        // Cleanup function
         return () => {
             isMounted = false;
         };
