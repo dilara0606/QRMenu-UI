@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import logo from './images/logo.png';
 import 'font-awesome/css/font-awesome.min.css';
@@ -8,32 +8,8 @@ import Item from './components/Item/Item.js';
 function App() {
     const [categories, setCategories] = useState([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-    const restaurantImageRef = useRef(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    } else {
-                        entry.target.classList.remove('visible');
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        if (restaurantImageRef.current) {
-            observer.observe(restaurantImageRef.current);
-        }
-
-        return () => {
-            if (restaurantImageRef.current) {
-                observer.unobserve(restaurantImageRef.current);
-            }
-        };
-    }, []);
+    const [cart, setCart] = useState([]);
+    const [cartVisible, setCartVisible] = useState(false);
 
     const handleCategoriesLoaded = (categories) => {
         setCategories(categories);
@@ -43,12 +19,27 @@ function App() {
         setSelectedCategoryId(categoryId);
     };
 
+    const toggleCartVisibility = () => {
+        setCartVisible(prev => !prev);
+    };
+
+    const addToCart = (product) => {
+        setCart(prevCart => [...prevCart, product]);
+    };
+
+    const removeFromCart = (productId) => {
+        setCart(prevCart => prevCart.filter(item => item.id !== productId));
+    };
+
+    const totalAmount = cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+
     return (
         <div className="App">
             <nav className="navbar">
                 <img src={logo} className="logo" alt="Logo" />
-                <div className="cart-icon">
+                <div className="cart-icon" onClick={toggleCartVisibility}>
                     <i className="fa fa-shopping-cart"></i>
+                    {cart.length > 0 && <span className="cart-count">{cart.length}</span>}
                 </div>
             </nav>
             <header className="App-header">
@@ -69,12 +60,36 @@ function App() {
                         </div>
                         {selectedCategoryId === category.id && (
                             <div className='category-products'>
-                                <Item categoryId={selectedCategoryId} />
+                                <Item categoryId={selectedCategoryId} onProductAdd={addToCart} />
                             </div>
                         )}
                     </div>
                 ))}
             </section>
+            
+            {cartVisible && (
+                <div className="cart-modal">
+                    <h2>Cart</h2>
+                    {cart.length > 0 ? (
+                        <ul>
+                            {cart.map((item) => (
+                                <li key={item.id}>
+                                    <img src={item.imageUrl} alt={item.name} style={{ width: '50px', height: '50px' }} />
+                                    <span>{item.name} - ₺{item.price.toFixed(2)}</span>
+                                    <button onClick={() => removeFromCart(item.id)} className="remove-button">
+                                        <i className="fa fa-trash"></i>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>Your cart is empty.</p>
+                    )}
+                    <p>Total: ₺{totalAmount}</p>
+                    <button onClick={toggleCartVisibility} className="close-cart-button">Close</button>
+                </div>
+            )}
+
             <footer>
                 <div className="social-media">
                     <a href="#facebook" className="social-icon"><i className="fa fa-facebook"></i></a>

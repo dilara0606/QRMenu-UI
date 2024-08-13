@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Item({ categoryId, onProductsLoaded }) {
+function Item({ categoryId, onProductsLoaded, onProductAdd }) {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [products, setProducts] = useState([]);
@@ -41,6 +41,12 @@ function Item({ categoryId, onProductsLoaded }) {
         };
     }, [categoryId, onProductsLoaded]);
 
+    const handleAddToCart = (product) => {
+        if (onProductAdd) {
+            onProductAdd(product);
+        }
+    };
+
     if (error) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -55,6 +61,7 @@ function Item({ categoryId, onProductsLoaded }) {
                             <h5>{product.name}</h5>
                             <p>{product.description}</p>
                             <p className="product-price">₺{product.price.toFixed(2)}</p>
+                            <button onClick={() => handleAddToCart(product)} className="add-to-cart-button">Add to Cart</button>
                         </div>
                     </div>
                 ))}

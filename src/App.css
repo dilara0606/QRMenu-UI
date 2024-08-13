@@ -162,12 +162,14 @@
 
 .category-products {
   width: 100%;
-  margin-top: 10px; /* Ürünler ile kategori içeriği arasına boşluk bırakır */
+  margin-top: 10px; /* Space between category and products */
 }
 
 .products {
-  display: flex; 
-  flex-wrap: wrap; /* Satıra sığmayan ürünlerin alt satıra geçmesini sağlar */
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  justify-content: center; /* Centers items horizontally */
+  margin: 0 auto; /* Centers the container itself */
 }
 
 .product-item {
@@ -179,9 +181,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 140px;
   transition: transform 0.2s;
-  margin-top: 10px; /* Ürünler arasında boşluk bırakır */
-  margin-right: 20px;
-  
+  margin: 10px; /* Space between products */
 }
 
 .product-item:hover {
@@ -215,6 +215,29 @@
   color: #28a745;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.add-to-cart-button {
+  background-color: #28a745; /* Matching the color of the product price */
+  color: white;
+  border: none;
+  padding: 10px 15px; /* Added horizontal padding for a more balanced look */
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 1rem; /* Increased font size for better readability */
+  font-weight: bold; /* Make the text bold */
+  transition: background-color 0.2s, transform 0.2s; /* Smooth transition for background color and scaling */
+}
+
+.add-to-cart-button:hover {
+  background-color: #218838; /* Darker shade of green for hover effect */
+  transform: scale(1.05); /* Slightly scale up on hover for visual feedback */
+}
+
+.add-to-cart-button:active {
+  background-color: #1e7e34; /* Even darker shade for active state */
+  transform: scale(1); /* Reset scale on active state */
 }
 
 footer {
@@ -274,3 +297,82 @@ footer {
     font-size: 64px; /* Daha büyük ekranlarda font boyutu */
   }
 }
+
+/* Existing styles */
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.cart-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+/* Cart modal styles */
+.cart-modal {
+  position: fixed;
+  top: 75px; /* Adjust based on your navbar height */
+  right: 20px;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it appears above other content */
+  padding: 10px;
+  max-height: 80vh; /* Limit height */
+  overflow-y: auto; /* Scroll if content exceeds height */
+}
+
+.cart-modal h2 {
+  margin-top: 0;
+}
+
+.cart-modal ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cart-modal li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: auto;
+}
+
+.remove-button:hover {
+  color: #f00; /* Change color on hover */
+}
+
+.cart-modal img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.close-cart-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
